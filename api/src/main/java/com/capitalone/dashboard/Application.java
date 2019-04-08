@@ -3,6 +3,8 @@ package com.capitalone.dashboard;
 import static springfox.documentation.builders.PathSelectors.regex;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
+import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
@@ -23,42 +25,36 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * Application configuration and bootstrap
+ * (exclude = { MongoAutoConfiguration.class, MongoDataAutoConfiguration.class })
  */
-@SpringBootApplication
+@SpringBootApplication(exclude = { MongoAutoConfiguration.class, MongoDataAutoConfiguration.class })
 @EnableSwagger2
 @EnableEncryptableProperties
 public class Application extends SpringBootServletInitializer {
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(Application.class, RestApiAppConfig.class, WebMVCConfig.class, MongoConfig.class);
-    }
-    
-    public static void main(String[] args) {
-        new Application().configure(new SpringApplicationBuilder(Application.class)).run(args);
-    }
+	@Override
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+		return application.sources(Application.class, RestApiAppConfig.class, WebMVCConfig.class, MongoConfig.class);
+	}
 
-    @Bean
-    public Docket documentation() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .select()
-                .apis(RequestHandlerSelectors.any())
-                .paths(regex("/.*"))
-                .build()
-                .pathMapping("/")
-                .apiInfo(metadata());
-    }
+	public static void main(String[] args) {
+		new Application().configure(new SpringApplicationBuilder(Application.class)).run(args);
+	}
 
-    @Bean
-    public UiConfiguration uiConfig() {
-        return UiConfiguration.DEFAULT;
-    }
+	@Bean
+	public Docket documentation() {
+		return new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.any()).paths(regex("/.*"))
+				.build().pathMapping("/").apiInfo(metadata());
+	}
 
-    private ApiInfo metadata() {
-        return new ApiInfoBuilder()
-                .title("Hygieia API")
-                .description("API Documentation for Hygieia")
-                .version("2.0")
-                .contact(new Contact("Amit Mawkin/Tapabrata Pal", "https://github.com/capitalone/Hygieia", "hygieia@capitalone.com"))
-                .build();
-    }
+	@Bean
+	public UiConfiguration uiConfig() {
+		return UiConfiguration.DEFAULT;
+	}
+
+	private ApiInfo metadata() {
+		return new ApiInfoBuilder().title("Hygieia API").description("API Documentation for Hygieia").version("2.0")
+				.contact(new Contact("Amit Mawkin/Tapabrata Pal", "https://github.com/capitalone/Hygieia",
+						"hygieia@capitalone.com"))
+				.build();
+	}
 }

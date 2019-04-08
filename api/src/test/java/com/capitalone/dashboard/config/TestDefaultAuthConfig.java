@@ -4,6 +4,8 @@ import com.capitalone.dashboard.repository.ApiTokenRepository;
 import com.capitalone.dashboard.service.*;
 import org.mockito.Mockito;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
+import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
@@ -41,7 +43,7 @@ import com.capitalone.dashboard.service.UserInfoServiceImpl;
 import com.capitalone.dashboard.util.PaginationHeaderUtility;
 
 
- @SpringBootApplication
+ @SpringBootApplication(exclude = { MongoAutoConfiguration.class, MongoDataAutoConfiguration.class })
  @ComponentScan(basePackages = {"com.capitalone.dashboard.auth"})
  public class TestDefaultAuthConfig {
 

@@ -12,10 +12,10 @@ if [ "$TEST_SCRIPT" != "" ]
 then
         #for testing locally
         PROP_FILE=application.properties
-else 
+else
 	PROP_FILE=config/hygieia-jenkins-build-collector.properties
 fi
-  
+
 if [ "$MONGO_PORT" != "" ]; then
 	# Sample: MONGO_PORT=tcp://172.17.0.20:27017
 	MONGODB_HOST=`echo $MONGO_PORT|sed 's;.*://\([^:]*\):\(.*\);\1;'`
@@ -41,7 +41,7 @@ then
 	DOCKER_LOCALHOST=10.0.2.2
 	MAPPED_URL=`echo "$JENKINS_MASTER"|sed "s|localhost|$DOCKER_LOCALHOST|"`
 	echo "Mapping localhost -> $MAPPED_URL"
-	JENKINS_MASTER=$MAPPED_URL	
+	JENKINS_MASTER=$MAPPED_URL
 fi
 
 echo $JENKINS_OP_CENTER|egrep localhost >>/dev/null
@@ -53,7 +53,7 @@ then
 	LOCALHOST=10.0.2.2
 	MAPPED_URL=`echo "$JENKINS_OP_CENTER"|sed "s|localhost|$LOCALHOST|"`
 	echo "Mapping localhost -> $MAPPED_URL"
-	JENKINS_OP_CENTER=$MAPPED_URL	
+	JENKINS_OP_CENTER=$MAPPED_URL
 fi
 
 cat > $PROP_FILE <<EOF
@@ -61,7 +61,7 @@ cat > $PROP_FILE <<EOF
 dbname=${HYGIEIA_API_ENV_SPRING_DATA_MONGODB_DATABASE:-dashboarddb}
 
 #Database HostName - default is localhost
-dbhost=${MONGODB_HOST:-10.0.1.1}
+dbhost=${MONGODB_HOST:-mongodb.db}
 
 #Database Port - default is 27017
 dbport=${MONGODB_PORT:-27017}
@@ -70,10 +70,10 @@ dbport=${MONGODB_PORT:-27017}
 dbusername=${HYGIEIA_API_ENV_SPRING_DATA_MONGODB_USERNAME:-dashboarduser}
 
 #Database Password - default is blank
-dbpassword=${HYGIEIA_API_ENV_SPRING_DATA_MONGODB_PASSWORD:-dbpassword}
+dbpassword=${HYGIEIA_API_ENV_SPRING_DATA_MONGODB_PASSWORD:-1qazxSw2}
 
 #Collector schedule (required)
-jenkins.cron=${JENKINS_CRON:-0 0/5 * * * *}
+jenkins.cron=${JENKINS_CRON:-0 0/1 * * * *}
 
 #The page size
 jenkins.pageSize=${JENKINS_PAGE_SIZE:-1000}
@@ -82,7 +82,7 @@ jenkins.pageSize=${JENKINS_PAGE_SIZE:-1000}
 jenkins.folderDepth=${JENKINS_FOLDER_DEPTH:-10}
 
 #Jenkins server (required) - Can provide multiple
-#jenkins.servers[0]=http://jenkins.company.com
+jenkins.servers[0]=http://jenkins.company.com
 #jenkins.niceNames[0]=[YourJenkins]
 #jenkins.environments[0]=[DEV,QA,INT,PERF,PROD]
 #Another option: If using same username/password Jenkins auth - set username/apiKey to use HTTP Basic Auth (blank=no auth)
